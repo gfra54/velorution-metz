@@ -56,6 +56,15 @@
             </div>
           </div>
           <!-- End Burger Menu -->
+          <div id="mobile-nav" class="navbar-menu">
+          <div class="navbar-end">
+          <?php foreach(wp_get_nav_menu_items('menu') as $menu){?>
+            <div class="navbar-item">
+              <a class="navbar-item" href="<?php echo $menu->url;?>"><?php echo $menu->title;?></a>
+            </div>
+            <?php }?>
+          </div>
+        </div>
         </nav>
         <!-- End Mobile Nav -->
         <!-- Begin Hero Content-->
