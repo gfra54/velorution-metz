@@ -47,7 +47,6 @@ get_header(); ?>
 
 
 <?php
-setlocale(LC_TIME, "fr_FR");
 $timestamp = strtotime('last fri of this month -7 days'); ?>
 <a id="dates" name="dates"></a>
 <div class="section-dark resume">
