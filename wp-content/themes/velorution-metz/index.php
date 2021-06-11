@@ -165,7 +165,7 @@ $timestamp = strtotime('last fri of this month -7 days'); ?>
         </h1>
       </div>
       <div class="column is-8 is-offset-2">
-        Pour plus d'informations, <a href="https://www.facebook.com/velorutionmetz/">consultez la page Facebook de la vélorution</a>.
+        Pour plus d'informations, <a href="https://www.facebook.com/velorutionmetz/">consultez la page Facebook de la vélorution</a> ou envoyez un mail à <a href="mailto:contact@velorution-metz.fr">contact@velorution-metz.fr</a>.
       </div>
     </div>
   </div>
