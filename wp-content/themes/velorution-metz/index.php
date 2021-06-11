@@ -63,14 +63,14 @@ $timestamp = strtotime('last fri of this month -7 days'); ?>
           <h2 class="subtitle mt-5">
             La prochaine vélorution aura lieu le <?php
                                                   $timestamp = strtotime('last fri of this month');
-                                                  echo strftime("%d %B %Y", $timestamp);
+                                                  echo strftime("%A %d %B %Y", $timestamp);
                                                   ?> à 19h !
 
           </h2>
           <p> La suivante aura lieu le
             <?php
             $timestamp = strtotime('last fri of next month');
-            echo strftime("%d %B %Y", $timestamp);
+            echo strftime("%A %d %B %Y", $timestamp);
             ?>.
           </p>
         <?php } else { ?>

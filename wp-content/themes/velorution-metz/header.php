@@ -12,13 +12,14 @@
     ></script>
 	<?php wp_head(); ?>
   <style>
-.hero {
+.hero.is-medium {
   background: linear-gradient(rgba(31, 44, 108, 0.65), rgba(31, 44, 108, 0.65)), rgba(0, 0, 0, 0.55) url(<?php the_field('photo_dillustration', 'option'); ?>) no-repeat;
-  background-attachment: fixed;
+  /* background-attachment: fixed; */
   background-size: cover;
   color: white;
   box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   font-family: 'Poppins', sans-serif;
+  background-position: center bottom;
 }
 
 </style>
@@ -44,7 +45,7 @@
     <!-- Begin Header -->
     <div class="header-wrapper" id="home">
       <!-- Begin Hero -->
-      <section class="hero is-large">
+      <section class="hero is-medium">
         <!-- Begin Mobile Nav -->
         <nav class="navbar is-transparent is-hidden-desktop">
           <!-- Begin Burger Menu -->
