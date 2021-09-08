@@ -14,8 +14,16 @@
  * @subpackage Twenty_Twenty_One
  * @since Twenty Twenty-One 1.0
  */
-
+$timestamp = strtotime('last fri of this month -7 days');
 get_header(); ?>
+
+<a href="#dates" onclick="$(this).fadeOut()" class="notification is-link is-light" style="position:fixed;bottom:1em;left:1em;z-index:10;margin:0">
+  La prochaine vélorution aura lieu le
+  <?php
+  $timestamp = strtotime('last fri of this month');
+  echo strftime("%A %d %B %Y", $timestamp);
+  ?> à 19h !
+</a>
 
 
 <?php if ($apropos = get_post_by_name('a-propos', 'page')) { ?>
@@ -47,7 +55,9 @@ get_header(); ?>
 
 
 <?php
-$timestamp = strtotime('last fri of this month -7 days'); ?>
+?>
+
+
 <a id="dates" name="dates"></a>
 <div class="section-dark resume">
   <div class="container">
@@ -59,7 +69,7 @@ $timestamp = strtotime('last fri of this month -7 days'); ?>
       </div>
       <div class="column is-10 has-text-centered is-offset-1">
         <?php if (get_field('calculer_automatiquement', 'option')) { ?>
-          <p>La vélorution Metz a lieu tous les derniers vendredis du mois sur parvis de la gare de Metz à 19h.</p>
+          <p>La vélorution Metz a lieu tous les derniers vendredis du mois sur. Départ prévu depuis le parvis de la gare de Metz à 19h.</p>
           <h2 class="subtitle mt-5">
             La prochaine vélorution aura lieu le <?php
                                                   $timestamp = strtotime('last fri of this month');
@@ -81,12 +91,12 @@ $timestamp = strtotime('last fri of this month -7 days'); ?>
   </div>
 </div>
 
-<?php if($banniere = get_field('banniere', 'option')) {?>
-<br>
-<img src="<?php echo $banniere ?>" style="width:100%;">
-<br>
-<br>
-<?php }?>
+<?php if ($banniere = get_field('banniere', 'option')) { ?>
+  <br>
+  <img src="<?php echo $banniere ?>" style="width:100%;">
+  <br>
+  <br>
+<?php } ?>
 
 
 <div id="objectifs" class="section-color services" id="services">
