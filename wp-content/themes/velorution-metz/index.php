@@ -21,7 +21,7 @@ get_header(); ?>
   La prochaine vélorution aura lieu le
   <?php
   $timestamp = strtotime('last fri of this month');
-  echo strftime("%A %d %B %Y", $timestamp);
+  echo utf8_encode(strftime("%A %d %B %Y", $timestamp));
   ?> à 19h !
 </a>
 
@@ -73,14 +73,14 @@ get_header(); ?>
           <h2 class="subtitle mt-5">
             La prochaine vélorution aura lieu le <?php
                                                   $timestamp = strtotime('last fri of this month');
-                                                  echo strftime("%A %d %B %Y", $timestamp);
+                                                  echo utf8_encode(strftime("%A %d %B %Y", $timestamp));
                                                   ?> à 19h !
 
           </h2>
           <p> La suivante aura lieu le
             <?php
             $timestamp = strtotime('last fri of next month');
-            echo strftime("%A %d %B %Y", $timestamp);
+            echo utf8_encode(strftime("%A %d %B %Y", $timestamp));
             ?>.
           </p>
         <?php } else { ?>
