@@ -140,7 +140,7 @@ get_header(); ?>
 
 if (have_posts()) { ?>
 
-  <div class="section-dark">
+  <div id="actus" class="section-dark">
     <div class="container">
       <div class="columns is-multiline">
         <div class="column is-12">
