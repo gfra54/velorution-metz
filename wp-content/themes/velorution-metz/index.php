@@ -91,13 +91,6 @@ get_header(); ?>
   </div>
 </div>
 
-<?php if ($banniere = get_field('banniere', 'option')) { ?>
-  <br>
-  <img src="<?php echo $banniere ?>" style="width:100%;">
-  <br>
-  <br>
-<?php } ?>
-
 
 <div id="objectifs" class="section-color services" id="services">
   <div class="container">
@@ -141,6 +134,50 @@ get_header(); ?>
   </div>
 </div>
 <!-- End Services Content -->
+
+
+<?php
+
+if (have_posts()) { ?>
+
+  <div class="section-dark">
+    <div class="container">
+      <div class="columns is-multiline">
+        <div class="column is-12">
+          <h1 class="title has-text-centered section-title">Actualités</h1>
+        </div>
+        <div class="column is-three-fifths is-offset-one-fifth about-me aos-init aos-animate" data-aos="fade-in" data-aos-easing="linear">
+          <?php
+          while (have_posts()) {
+            the_post(); ?>
+
+            <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+              <header class="entry-header alignwide">
+                <?php the_title('<h2 class="title">', '</h2>'); ?>
+                Le <?php the_date('d/m/Y'); ?>
+              </header><!-- .entry-header -->
+              <br>
+              <div class="content"><?php the_content(); ?></div>
+
+            </article>
+            <br>
+            <hr><br>
+          <?php
+          } ?>
+        </div>
+      </div>
+    </div>
+  </div>
+<?php
+} ?>
+
+
+<?php if ($banniere = get_field('banniere', 'option')) { ?>
+  <br>
+  <img src="<?php echo $banniere ?>" style="width:100%;">
+  <br>
+  <br>
+<?php } ?>
 
 <?php if ($gallerie = get_post_by_name('gallerie', 'page')) { ?>
   <?php
