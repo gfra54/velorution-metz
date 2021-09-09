@@ -35,11 +35,11 @@
     <!-- End Preloader-->
     <!-- Begin Scroll Up Button -->
 
-    <form action="#home">
+    <!--<form action="#home">
       <button id="toTop" title="Go to top">
         <i class="fas fa-angle-up"></i>
       </button>
-    </form>
+    </form>-->
     <!-- End Scroll Up Button -->
 
     <!-- Begin Header -->

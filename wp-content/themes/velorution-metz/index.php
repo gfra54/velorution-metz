@@ -17,7 +17,7 @@
 $timestamp = strtotime('last fri of this month -7 days');
 get_header(); ?>
 
-<a href="#dates" onclick="$(this).fadeOut()" class="notification is-link is-light" style="position:fixed;bottom:1em;left:1em;z-index:10;margin:0">
+<a href="#dates" onclick="$(this).fadeOut()" class="notification is-success" style="position:fixed;bottom:1em;left:1em;z-index:10;margin:0">
   La prochaine vélorution aura lieu le
   <?php
   $timestamp = strtotime('last fri of this month');
