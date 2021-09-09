@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
   };
   
   function scrollFunction() {
+    return;
     if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
       document.getElementById("toTop").style.display = "block";
     } else {

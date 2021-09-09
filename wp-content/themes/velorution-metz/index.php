@@ -59,7 +59,7 @@ get_header(); ?>
 
 
 <a id="dates" name="dates"></a>
-<div class="section-dark resume">
+<div class="section-dark">
   <div class="container">
     <div class="columns is-multiline" data-aos="fade-in" data-aos-easing="linear">
       <div class="column is-12 about-me">
@@ -68,6 +68,7 @@ get_header(); ?>
         </h1>
       </div>
       <div class="column is-10 has-text-centered is-offset-1">
+
         <?php if (get_field('calculer_automatiquement', 'option')) { ?>
           <p>La vélorution Metz a lieu tous les derniers vendredis du mois sur. Départ prévu depuis le parvis de la gare de Metz à 19h.</p>
           <h2 class="subtitle mt-5">
@@ -86,6 +87,29 @@ get_header(); ?>
         <?php } else { ?>
           <?php echo get_field('texte_prochaines_dates', 'option'); ?>
         <?php } ?>
+
+
+        
+        </div>
+      <div class="column is-6 has-text-centered is-offset-3">
+        <hr>
+        <form id="email">
+          <h4 class="title is-5">Vous avez peur de rater la date ?</h4>
+          <h5 class="subtitle is-6">Entrez votre adresse mail ci-dessous et vous tiendrons informé des prochaines vélorutions</h5>
+          <div class="field">
+            <label class="label">Adresse e-mail</label>
+            <div class="control has-icons-left has-icons-right">
+              <input class="input" type="email" placeholder="Votre adresse e-mail" value="">
+              <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+              </span>
+            </div>
+            <p class="help">Cette adresse ne sera partagée avec personne.</p>
+          </div>
+          <button class="button is-link">Valider</button>
+        </form>
+
+
       </div>
     </div>
   </div>
