@@ -76,3 +76,11 @@ function random_readable_pwd($length=10){
 
     return $pwd;
 }
+
+
+function me($var) {
+	$ret = print_r($var,true);
+		echo '<pre>'.htmlspecialchars($ret).'</pre>';
+
+	exit;
+}
