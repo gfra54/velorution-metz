@@ -108,7 +108,7 @@ get_header(); ?>
           </div>
           <button class="button is-link">Valider l'inscription</button>
           <br>
-          <a href="./wp-admin/profile.php" class="button is-small is-text">Déjà inscrit ? Cliquez ici pour gérer votre compte</a>
+          <a href="./wp-admin/profile.php" class="button is-small is-text">Déjà inscrit ? Cliquez ici pour gérer vos préférences</a>
         </form>
 
 
