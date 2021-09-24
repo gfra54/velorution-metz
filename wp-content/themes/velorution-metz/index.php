@@ -237,7 +237,7 @@ if (have_posts()) { ?>
         </h1>
       </div>
       <div class="column is-8 is-offset-2">
-        Pour plus d'informations, <a href="https://www.facebook.com/velorutionmetz/">consultez la page Facebook de la vélorution</a> ou envoyez un mail à <a href="mailto:contact@velorution-metz.fr">contact@velorution-metz.fr</a>.
+        Pour plus d'informations, <a href="https://www.facebook.com/velorutionmetz/">consultez notre page Facebook</a> ou <a href="https://twitter.com/VelorutionMetz">notre compte Twitter</a> ou envoyez un mail à <a href="mailto:contact@velorution-metz.fr">contact@velorution-metz.fr</a>.
       </div>
     </div>
   </div>
