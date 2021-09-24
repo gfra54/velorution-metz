@@ -106,7 +106,9 @@ get_header(); ?>
             </div>
             <p class="help">Cette adresse ne sera partagée avec personne.</p>
           </div>
-          <button class="button is-link">Valider</button>
+          <button class="button is-link">Valider l'inscription</button>
+          <br>
+          <a href="./wp-admin/profile.php" class="button is-small is-text">Déjà inscrit ? Cliquez ici pour gérer votre compte</a>
         </form>
 
 
