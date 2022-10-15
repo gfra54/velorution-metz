@@ -17,13 +17,15 @@
 $timestamp = strtotime('last fri of this month -7 days');
 get_header(); ?>
 
-<a href="#dates" onclick="$(this).fadeOut()" class="notification is-success" style="position:fixed;bottom:1em;left:1em;z-index:10;margin:0">
-  La prochaine vélorution aura lieu le
-  <?php
-  $timestamp = strtotime('last fri of this month');
-  echo utf8_encode(strftime("%A %d %B %Y", $timestamp));
-  ?> à 19h !
-</a>
+<?php if (get_field('calculer_automatiquement', 'option')) { ?>
+  <a href="#dates" onclick="$(this).fadeOut()" class="notification is-success" style="background:rgba(254, 225, 0, 0.8);color:#333;position:fixed;bottom:1em;left:1em;z-index:10;margin:0;margin-right:1em">
+    La prochaine vélorution aura lieu le
+    <strong><?php
+    $timestamp = strtotime('last fri of this month');
+    echo str_replace(date('Y'),'',utf8_encode(strftime("%A %d %B %Y", $timestamp)));
+    ?> à 19h</strong>&nbsp;!<br><b>Peur d'oublier ? <u>Inscrivez-vous ici</u></b> et vous préviendra !
+  </a>
+<?php } ?>
 
 
 <?php if ($apropos = get_post_by_name('a-propos', 'page')) { ?>
@@ -89,10 +91,16 @@ get_header(); ?>
         <?php } ?>
 
 
-        
-        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pt-5 pb-5" style="background:rgb(254, 225, 0)">
+  <div class="container">
+    <div class="columns is-multiline" data-aos="fade-in" data-aos-easing="linear">
       <div class="column is-6 has-text-centered is-offset-3">
-        <hr>
         <form id="email">
           <h4 class="title is-5">Vous avez peur de rater la date ?</h4>
           <h5 class="subtitle is-6">Entrez votre adresse mail ci-dessous et vous tiendrons informé des prochaines vélorutions</h5>
@@ -164,7 +172,7 @@ get_header(); ?>
 
 <?php
 
-if (have_posts()) { ?>
+if (get_field('afficher_actus','option') && have_posts()) { ?>
 
   <div id="actus" class="section-dark">
     <div class="container">

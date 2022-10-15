@@ -13,7 +13,7 @@
 	<?php wp_head(); ?>
   <style>
 .hero.is-medium {
-  background: linear-gradient(rgba(31, 44, 108, 0.65), rgba(31, 44, 108, 0.65)), rgba(0, 0, 0, 0.55) url(<?php the_field('photo_dillustration', 'option'); ?>) no-repeat;
+  background: linear-gradient(rgba(254,225,0, 0.65), rgba(254,225,0, 0.65)), rgba(0, 0, 0, 0.55) url(<?php the_field('photo_dillustration', 'option'); ?>) no-repeat;
   /* background-attachment: fixed; */
   background-size: cover;
   color: white;

@@ -4,7 +4,7 @@
 <!-- Begin Footer -->
 <div class="footer">
     <p>
-        <strong class="white">Vélorution Metz</strong> <a href="https://www.facebook.com/velorutionmetz/">Retrouvez-nous sur Facebook</a>.
+        <strong class="white">Vélorution Metz</strong> &middot; Site créé par <a href="https://twitter.com/jilfransoi/">Jilfransoi</a>
     </p>
 </div>
 <!-- End Footer -->
