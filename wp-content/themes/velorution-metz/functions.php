@@ -4,9 +4,7 @@ foreach (glob(__DIR__ . '/actions/*.php') as $action) {
 }
 add_theme_support('title-tag');
 
-wp_enqueue_script('velorution-metz-script', get_template_directory_uri() . '/js/showcase.js', array(), wp_get_theme()->get('Version'), true);
-wp_enqueue_script('velorution-metz-script-email', get_template_directory_uri() . '/js/email.js', array(), wp_get_theme()->get('Version'), true);
-wp_enqueue_style('velorution-metz-style', get_template_directory_uri() . '/css/showcase.css', array(), wp_get_theme()->get('Version'));
+wp_enqueue_style('velorution-metz-common-style', get_template_directory_uri() . '/css/common.css', array(), wp_get_theme()->get('Version'));
 
 
 if (function_exists('acf_add_options_page')) {

@@ -200,7 +200,6 @@ function get_template_part( $slug, $name = null, $args = array() ) {
 	 * @param array    $args      Additional arguments passed to the template.
 	 */
 	do_action( 'get_template_part', $slug, $name, $templates, $args );
-
 	if ( ! locate_template( $templates, true, false, $args ) ) {
 		return false;
 	}

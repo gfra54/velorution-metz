@@ -26,7 +26,6 @@ function get_field( $selector, $post_id = false, $format_value = true ) {
 	// get field
 	$field = acf_maybe_get_field( $selector, $post_id );
 	
-	
 	// create dummy field
 	if( !$field ) {
 		

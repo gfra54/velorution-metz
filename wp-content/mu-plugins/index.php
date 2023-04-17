@@ -7,6 +7,7 @@ Author: Gilles FRANCOIS
 Author URI: 
 */
 
+include 'send-email.php';
 
 /* vérification de la configuration wordpress (en cas de migration) */
 function check_current_config(){
@@ -83,3 +84,5 @@ function check_current_config(){
 	}
 	return $url;
 }
+
+

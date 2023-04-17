@@ -1,21 +1,18 @@
 <?php
+/*
+Template Name: Home
+*/
 
-/**
- * The main template file
- *
- * This is the most generic template file in a WordPress theme
- * and one of the two required files for a theme (the other being style.css).
- * It is used to display a page when nothing more specific matches a query.
- * E.g., it puts together the home page when no home.php file exists.
- *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
- *
- * @package WordPress
- * @subpackage Twenty_Twenty_One
- * @since Twenty Twenty-One 1.0
- */
+wp_enqueue_script('velorution-metz-script', get_template_directory_uri() . '/js/showcase.js', array(), wp_get_theme()->get('Version'), true);
+wp_enqueue_script('velorution-metz-script-email', get_template_directory_uri() . '/js/email.js', array(), wp_get_theme()->get('Version'), true);
+wp_enqueue_style('velorution-metz-style', get_template_directory_uri() . '/css/showcase.css', array(), wp_get_theme()->get('Version'));
+
+
 $timestamp = strtotime('last fri of this month -7 days');
-get_header(); ?>
+get_header(); 
+
+get_template_part( 'template-parts/site/header' );
+?>
 
 <?php if (get_field('calculer_automatiquement', 'option')) { ?>
   <a href="#dates" onclick="$(this).fadeOut()" class="notification is-success" style="background:rgba(254, 225, 0, 0.8);color:#333;position:fixed;bottom:1em;left:1em;z-index:10;margin:0;margin-right:1em">
@@ -253,4 +250,5 @@ if (get_field('afficher_actus','option') && have_posts()) { ?>
 <!-- End Contact Content -->
 
 <?php
+get_template_part( 'template-parts/site/footer' );
 get_footer();
