@@ -2,6 +2,8 @@
 
 namespace WPMailSMTP;
 
+use WPMailSMTP\Helpers\Helpers;
+
 /**
  * Class WP provides WordPress shortcuts.
  *
@@ -16,7 +18,8 @@ class WP {
 	 *
 	 * @var array
 	 */
-	protected static $admin_notices = array();
+	protected static $admin_notices = [];
+
 	/**
 	 * CSS class for a success notice.
 	 *
@@ -25,6 +28,7 @@ class WP {
 	 * @var string
 	 */
 	const ADMIN_NOTICE_SUCCESS = 'notice-success';
+
 	/**
 	 * CSS class for an error notice.
 	 *
@@ -33,6 +37,7 @@ class WP {
 	 * @var string
 	 */
 	const ADMIN_NOTICE_ERROR = 'notice-error';
+
 	/**
 	 * CSS class for an info notice.
 	 *
@@ -41,6 +46,7 @@ class WP {
 	 * @var string
 	 */
 	const ADMIN_NOTICE_INFO = 'notice-info';
+
 	/**
 	 * CSS class for a warning notice.
 	 *
@@ -49,6 +55,15 @@ class WP {
 	 * @var string
 	 */
 	const ADMIN_NOTICE_WARNING = 'notice-warning';
+
+	/**
+	 * Cross-platform line break.
+	 *
+	 * @since 3.4.0
+	 *
+	 * @var string
+	 */
+	const EOL = "\r\n";
 
 	/**
 	 * True if WP is processing an AJAX call.
@@ -254,7 +269,9 @@ class WP {
 	public static function get_default_email() {
 
 		if ( version_compare( get_bloginfo( 'version' ), '5.5-alpha', '<' ) ) {
-			$sitename = strtolower( $_SERVER['SERVER_NAME'] ); // phpcs:ignore
+			$sitename = ! empty( $_SERVER['SERVER_NAME'] ) ?
+				strtolower( sanitize_text_field( wp_unslash( $_SERVER['SERVER_NAME'] ) ) ) :
+				wp_parse_url( get_home_url( get_current_blog_id() ), PHP_URL_HOST );
 		} else {
 			$sitename = wp_parse_url( network_home_url(), PHP_URL_HOST );
 		}
@@ -483,7 +500,8 @@ class WP {
 	 */
 	public static function is_doing_self_ajax() {
 
-		$action = isset( $_REQUEST['action'] ) ? sanitize_key( $_REQUEST['action'] ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$action = isset( $_REQUEST['action'] ) ? sanitize_key( $_REQUEST['action'] ) : false;
 
 		return self::is_doing_ajax() && $action && substr( $action, 0, 12 ) === 'wp_mail_smtp';
 	}
@@ -499,7 +517,21 @@ class WP {
 	 */
 	public static function get_initiator_name( $file_path ) {
 
-		$cache_key = 'wp_mail_smtp_initiators';
+		return self::get_initiator( $file_path )['name'];
+	}
+
+	/**
+	 * Get the info of the plugin/theme/wp-core function.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @param string $file_path The absolute path of the function location.
+	 *
+	 * @return array
+	 */
+	public static function get_initiator( $file_path ) { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
+
+		$cache_key = 'wp_mail_smtp_initiators_data';
 
 		// Mainly we have several initiators and we can cache them for better performance.
 		$initiators_cache = get_transient( $cache_key );
@@ -509,37 +541,56 @@ class WP {
 			return $initiators_cache[ $file_path ];
 		}
 
-		$name = self::get_initiator_plugin( $file_path );
+		$initiator = self::get_initiator_plugin( $file_path );
 
-		if ( empty( $name ) ) {
-			$name = self::get_initiator_plugin( $file_path, true );
+		// Change the initiator name if the email was sent from the reloaded method in the email controls.
+		if (
+			! empty( $initiator ) &&
+			strpos( str_replace( '\\', '/', $file_path ), 'src/Pro/Emails/Control/Reload.php' )
+		) {
+			$initiator['name'] = sprintf( /* translators: %s - plugin name. */
+				esc_html__( 'WP Core (%s)', 'wp-mail-smtp' ),
+				$initiator['name']
+			);
 		}
 
-		if ( empty( $name ) ) {
-			$name = self::get_initiator_theme( $file_path );
+		if ( empty( $initiator ) ) {
+			$initiator = self::get_initiator_plugin( $file_path, true );
 		}
 
-		if ( empty( $name ) ) {
-			$name = esc_html__( 'WP Core', 'wp-mail-smtp' );
+		if ( empty( $initiator ) ) {
+			$initiator = self::get_initiator_theme( $file_path );
 		}
 
-		$initiators_cache[ $file_path ] = $name;
+		if ( empty( $initiator ) ) {
+			$initiator = self::get_initiator_wp_core( $file_path );
+		}
+
+		if ( empty( $initiator ) ) {
+			$initiator         = [];
+			$initiator['name'] = esc_html__( 'N/A', 'wp-mail-smtp' );
+			$initiator['slug'] = '';
+			$initiator['type'] = 'unknown';
+		}
+
+		$initiators_cache[ $file_path ] = $initiator;
+
 		set_transient( $cache_key, $initiators_cache, HOUR_IN_SECONDS );
 
-		return $name;
+		return $initiator;
 	}
 
 	/**
-	 * Get the initiator's name, if it's a plugin (or mu plugin).
+	 * Get the initiator's data, if it's a plugin (or mu plugin).
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param string $file_path       The absolute path of a file.
 	 * @param bool   $check_mu_plugin Whether to check for mu plugins or not.
 	 *
-	 * @return false|string
+	 * @return false|array
 	 */
-	private static function get_initiator_plugin( $file_path, $check_mu_plugin = false ) {
+	private static function get_initiator_plugin( $file_path, $check_mu_plugin = false ) { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh, Generic.Metrics.CyclomaticComplexity.MaxExceeded
 
 		$constant = empty( $check_mu_plugin ) ? 'WP_PLUGIN_DIR' : 'WPMU_PLUGIN_DIR';
 
@@ -547,9 +598,10 @@ class WP {
 			return false;
 		}
 
-		$root = basename( constant( $constant ) );
+		$root      = basename( constant( $constant ) );
+		$separator = defined( 'DIRECTORY_SEPARATOR' ) ? '\\' . DIRECTORY_SEPARATOR : '\/';
 
-		preg_match( "/\/$root\/(.[^\/]+)(\/|\.php)/", $file_path, $result );
+		preg_match( "/$separator$root$separator(.[^$separator]+)($separator|\.php)/", $file_path, $result );
 
 		if ( ! empty( $result[1] ) ) {
 			if ( ! function_exists( 'get_plugins' ) ) {
@@ -564,24 +616,32 @@ class WP {
 					1 === preg_match( "/^$plugin_slug(\/|\.php)/", $plugin ) &&
 					isset( $plugin_data['Name'] )
 				) {
-					return $plugin_data['Name'];
+					return [
+						'name' => $plugin_data['Name'],
+						'slug' => $plugin,
+						'type' => $check_mu_plugin ? 'mu-plugin' : 'plugin',
+					];
 				}
 			}
 
-			return $result[1];
+			return [
+				'name' => $result[1],
+				'slug' => '',
+				'type' => $check_mu_plugin ? 'mu-plugin' : 'plugin',
+			];
 		}
 
 		return false;
 	}
 
 	/**
-	 * Get the initiator's name, if it's a theme.
+	 * Get the initiator's data, if it's a theme.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param string $file_path The absolute path of a file.
 	 *
-	 * @return false|string
+	 * @return false|array
 	 */
 	private static function get_initiator_theme( $file_path ) {
 
@@ -589,18 +649,51 @@ class WP {
 			return false;
 		}
 
-		$root = basename( WP_CONTENT_DIR );
+		$root      = basename( WP_CONTENT_DIR );
+		$separator = defined( 'DIRECTORY_SEPARATOR' ) ? '\\' . DIRECTORY_SEPARATOR : '\/';
 
-		preg_match( "/\/$root\/themes\/(.[^\/]+)/", $file_path, $result );
+		preg_match( "/$separator$root{$separator}themes{$separator}(.[^$separator]+)/", $file_path, $result );
 
 		if ( ! empty( $result[1] ) ) {
 			$theme = wp_get_theme( $result[1] );
 
-			if ( method_exists( $theme, 'get' ) ) {
-				return $theme->get( 'Name' );
-			}
+			return [
+				'name' => method_exists( $theme, 'get' ) ? $theme->get( 'Name' ) : $result[1],
+				'slug' => $result[1],
+				'type' => 'theme',
+			];
+		}
 
-			return $result[1];
+		return false;
+	}
+
+	/**
+	 * Return WP Core if the file path is from WP Core (wp-admin or wp-includes folders).
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string $file_path The absolute path of a file.
+	 *
+	 * @return false|array
+	 */
+	private static function get_initiator_wp_core( $file_path ) {
+
+		if ( ! defined( 'ABSPATH' ) ) {
+			return false;
+		}
+
+		$wp_includes = defined( 'WPINC' ) ? trailingslashit( ABSPATH . WPINC ) : false;
+		$wp_admin    = trailingslashit( ABSPATH . 'wp-admin' );
+
+		if (
+			strpos( $file_path, $wp_includes ) === 0 ||
+			strpos( $file_path, $wp_admin ) === 0
+		) {
+			return [
+				'name' => esc_html__( 'WP Core', 'wp-mail-smtp' ),
+				'slug' => 'wp-core',
+				'type' => 'wp-core',
+			];
 		}
 
 		return false;
@@ -662,5 +755,49 @@ class WP {
 		$tz_offset = sprintf( '%s%02d:%02d', $sign, $abs_hour, $abs_mins );
 
 		return $tz_offset;
+	}
+
+	/**
+	 * Get wp remote response error message.
+	 *
+	 * @since 3.4.0
+	 *
+	 * @param array $response Response array.
+	 */
+	public static function wp_remote_get_response_error_message( $response ) {
+
+		if ( is_wp_error( $response ) ) {
+			return '';
+		}
+
+		$body        = wp_remote_retrieve_body( $response );
+		$message     = wp_remote_retrieve_response_message( $response );
+		$code        = wp_remote_retrieve_response_code( $response );
+		$description = '';
+
+		if ( ! empty( $body ) ) {
+			$description = is_string( $body ) ? $body : wp_json_encode( $body );
+		}
+
+		return Helpers::format_error_message( $message, $code, $description );
+	}
+
+	/**
+	 * Clean variables using sanitize_text_field. Arrays are cleaned recursively.
+	 * Non-string values are ignored.
+	 *
+	 * @since 3.7.0
+	 *
+	 * @param string|array $var Data to sanitize.
+	 *
+	 * @return string|array
+	 */
+	public static function sanitize_text( $var ) {
+
+		if ( is_array( $var ) ) {
+			return array_map( [ __CLASS__, 'sanitize_text' ], $var );
+		} else {
+			return is_string( $var ) ? sanitize_text_field( $var ) : $var;
+		}
 	}
 }

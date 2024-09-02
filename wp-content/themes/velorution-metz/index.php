@@ -9,18 +9,19 @@ wp_enqueue_style('velorution-metz-style', get_template_directory_uri() . '/css/s
 
 
 $timestamp = strtotime('last fri of this month -7 days');
-get_header(); 
+get_header();
 
-get_template_part( 'template-parts/site/header' );
+get_template_part('template-parts/site/header');
 ?>
 
 <?php if (get_field('calculer_automatiquement', 'option')) { ?>
   <a href="#dates" onclick="$(this).fadeOut()" class="notification is-success" style="background:rgba(254, 225, 0, 0.8);color:#333;position:fixed;bottom:1em;left:1em;z-index:10;margin:0;margin-right:1em">
     La prochaine vélorution aura lieu le
     <strong><?php
-    $timestamp = strtotime('last fri of this month');
-    echo str_replace(date('Y'),'',utf8_encode(strftime("%A %d %B %Y", $timestamp)));
-    ?> à 19h</strong>&nbsp;!<br><b>Peur d'oublier ? <u>Inscrivez-vous ici</u></b> et vous préviendra !
+            $timestamp = strtotime('last fri of this month');
+            echo str_replace(date('Y'), '', utf8_encode(strftime("%A %d %B %Y", $timestamp)));
+            ?> à 19h</strong>&nbsp;!
+            <?php /*<br><b>Peur d'oublier ? <u>Inscrivez-vous ici</u></b> et vous préviendra !*/?>
   </a>
 <?php } ?>
 
@@ -82,7 +83,8 @@ get_template_part( 'template-parts/site/header' );
             $timestamp = strtotime('last fri of next month');
             echo utf8_encode(strftime("%A %d %B %Y", $timestamp));
             ?>.
-          </p>
+          </p><br><br>
+          <p><i><small>Ces dates sont calculées automatiquement sur la base du "dernier vendredi de chaque mois". Il ne s'agit pas d'un rendez-vous en tant que tel. </small></i></p>
         <?php } else { ?>
           <?php echo get_field('texte_prochaines_dates', 'option'); ?>
         <?php } ?>
@@ -93,7 +95,8 @@ get_template_part( 'template-parts/site/header' );
     </div>
   </div>
 </div>
-
+<?php /*
+<a id="newsletter" name="newsletter"></a>
 <div class="pt-5 pb-5" style="background:rgb(254, 225, 0)">
   <div class="container">
     <div class="columns is-multiline" data-aos="fade-in" data-aos-easing="linear">
@@ -123,6 +126,32 @@ get_template_part( 'template-parts/site/header' );
 </div>
 
 
+<?php 
+
+*/
+
+if ($faq = get_post_by_name('questions-frequentes', 'page')) { ?>
+  <!-- Begin About Me Section -->
+  <div class="section-light about-me" id="questions-frequentes" style="max-width:800px;margin:0 auto">
+    <div class="container">
+      <div class="column is-12 about-me">
+        <h1 class="title has-text-centered section-title"><?php echo $faq->post_title; ?></h1>
+      </div>
+      <div class="columns is-multiline">
+        <?php if ($faq->post_excerpt) { ?>
+          <p class="is-larger">
+            <strong><?php echo $faq->post_excerpt; ?></strong>
+          </p>
+          <br />
+        <?php } ?>
+        <p><?php echo apply_filters("the_content", $faq->post_content); ?></p>
+
+      </div>
+    </div>
+  </div>
+  <!-- End About Me Content -->
+<?php } ?>
+<?php /*
 <div id="objectifs" class="section-color services" id="services">
   <div class="container">
     <div class="columns is-multiline">
@@ -167,9 +196,9 @@ get_template_part( 'template-parts/site/header' );
 <!-- End Services Content -->
 
 
-<?php
-
-if (get_field('afficher_actus','option') && have_posts()) { ?>
+<?php */
+/*
+if (get_field('afficher_actus', 'option') && have_posts()) { ?>
 
   <div id="actus" class="section-dark">
     <div class="container">
@@ -200,7 +229,7 @@ if (get_field('afficher_actus','option') && have_posts()) { ?>
     </div>
   </div>
 <?php
-} ?>
+}*/ ?>
 
 
 <?php if ($banniere = get_field('banniere', 'option')) { ?>
@@ -231,7 +260,7 @@ if (get_field('afficher_actus','option') && have_posts()) { ?>
     </div>
   </div>
   <!-- End Work Content -->
-<?php } ?>
+<?php } /*?>
 <!-- Begin Contact Content -->
 <div class="section-light contact" id="contact">
   <div class="container">
@@ -250,5 +279,6 @@ if (get_field('afficher_actus','option') && have_posts()) { ?>
 <!-- End Contact Content -->
 
 <?php
-get_template_part( 'template-parts/site/footer' );
+*/
+get_template_part('template-parts/site/footer');
 get_footer();

@@ -19,6 +19,16 @@ add_action('init', function () {
     register_nav_menu('menu', __('Menu'));
 });
 
+add_filter('the_content', function($content) {
+    $i = 6;
+    while($i > 0){
+        $pattern = "/<h$i(.*?)>/i";
+        $replacement = "<h$i$1 class=\"title mt-2 is-" . ($i + 1) . "\">";
+        $content = preg_replace($pattern, $replacement, $content);
+        $i--;
+    }
+    return $content;
+});
 
 
 function get_post_by_name(string $name, string $post_type = "post")
